@@ -1,0 +1,116 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100000
+
+int dq[MAX];
+int front = -1, rear = -1;
+
+int empty() {
+    return front == -1;
+}
+
+int size() {
+    if (empty()) return 0;
+    return rear - front + 1;
+}
+
+void push_front(int x) {
+    if (empty()) {
+        front = rear = MAX / 2;
+        dq[front] = x;
+    } else {
+        dq[--front] = x;
+    }
+}
+
+void push_back(int x) {
+    if (empty()) {
+        front = rear = MAX / 2;
+        dq[rear] = x;
+    } else {
+        dq[++rear] = x;
+    }
+}
+
+void pop_front() {
+    if (empty()) return;
+    if (front == rear) front = rear = -1;
+    else front++;
+}
+
+void pop_back() {
+    if (empty()) return;
+    if (front == rear) front = rear = -1;
+    else rear--;
+}
+
+int get_front() {
+    if (empty()) return -1;
+    return dq[front];
+}
+
+int get_back() {
+    if (empty()) return -1;
+    return dq[rear];
+}
+
+void clear() {
+    front = rear = -1;
+}
+
+void reverse() {
+    if (empty()) return;
+    int i = front, j = rear;
+    while (i < j) {
+        int t = dq[i];
+        dq[i] = dq[j];
+        dq[j] = t;
+        i++;
+        j--;
+    }
+}
+
+int cmp(const void *a, const void *b) {
+    return (*(int*)a - *(int*)b);
+}
+
+void sort() {
+    if (empty()) return;
+    qsort(&dq[front], size(), sizeof(int), cmp);
+}
+
+int main() {
+    int q;
+    scanf("%d", &q);
+    while (q--) {
+        int op, x;
+        scanf("%d", &op);
+        if (op == 1) {
+            scanf("%d", &x);
+            push_front(x);
+        } else if (op == 2) {
+            scanf("%d", &x);
+            push_back(x);
+        } else if (op == 3) {
+            pop_front();
+        } else if (op == 4) {
+            pop_back();
+        } else if (op == 5) {
+            printf("%d\n", get_front());
+        } else if (op == 6) {
+            printf("%d\n", get_back());
+        } else if (op == 7) {
+            printf("%d\n", empty());
+        } else if (op == 8) {
+            printf("%d\n", size());
+        } else if (op == 9) {
+            clear();
+        } else if (op == 10) {
+            reverse();
+        } else if (op == 11) {
+            sort();
+        }
+    }
+    return 0;
+}
